@@ -7,7 +7,7 @@ export const actionCreators = {
 }
 
 const initialState = {
-
+  token: null
 }
 
 export const reducer = (state = initialState, action) => {
