@@ -22,6 +22,7 @@
     "expo": "^27.0.1",
     "react": "16.3.1",
     "react-native": "~0.55.2",
+    "react-native-router-flux": "^4.0.0-beta.31",
     "reactotron-react-native": "^2.0.0",
     "redux-persist": "^5.10.0",
     "redux-thunk": "^2.3.0"

@@ -1,34 +1,30 @@
 import React, { Component } from 'react'
-import { AppRegistry, StyleSheet, View, Text, PanResponder } from 'react-native'
+import { StyleSheet, View } from 'react-native'
+import { connect } from 'react-redux'
+import { Router, Stack, Scene, Modal, ActionConst } from 'react-native-router-flux'
+
+import Login from './Login'
 
 import TicTacWoahAPI from '../service/TicTacWoahAPI'
 
-export default class App extends Component {
+const mapStateToProps = (state) => ({
+
+})
+
+class App extends Component {
 
   api = new TicTacWoahAPI()
 
-  state = {
-
-  }
-
-  componentDidMount() {
-     // start up code 
-  }
-
   render() {
-    return (
-      <View style={styles.container}>
-
-      </View>
+    return ( 
+      <Router>
+        <Stack key="root">
+          <Scene key="login" component={Login} title="Welcome"/>
+        </Stack>
+      </Router>   
     )
   }
 
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-})
-
-AppRegistry.registerComponent('App', () => App)
+export default connect(mapStateToProps)(App)
