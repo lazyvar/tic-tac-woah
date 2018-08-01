@@ -1,5 +1,9 @@
 export default class TicTacWoahAPI {
 
+  sleep = (ms) => {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
   constructor(token) {
     this.baseUrl = 'https://api.tic-tac-woah.com/'
     this.defaultHeaders = {
@@ -21,36 +25,39 @@ export default class TicTacWoahAPI {
 
   getGames = () => (
     new Promise((resolve, reject) => {
-      resolve({
-          games: [
-            {
-              player: {
-                username: "outsider",
-              },
-              myTurn: true
-            },{
-              player: {
-                username: "bean",
-              },
-              myTurn: false
-            }, {
-              player: {
-                username: "suarjio",
-              },
-              myTurn: false
-            }, {
-              player: {
-                username: "coulder",
-              },
-              myTurn: true
-            }, {
-              player: {
-                username: "jellybean",
-              },
-              myTurn: false
-            }  
-          ]
-      })
+      this.sleep(600)
+          .then(() => {
+            resolve({
+                games: [
+                  {
+                    player: {
+                      username: "outsider",
+                    },
+                    myTurn: true
+                  },{
+                    player: {
+                      username: "bean",
+                    },
+                    myTurn: false
+                  }, {
+                    player: {
+                      username: "suarjio",
+                    },
+                    myTurn: false
+                  }, {
+                    player: {
+                      username: "coulder",
+                    },
+                    myTurn: true
+                  }, {
+                    player: {
+                      username: "jellybean",
+                    },
+                    myTurn: false
+                  }  
+                ]
+            })
+          })
     })
   )
 
