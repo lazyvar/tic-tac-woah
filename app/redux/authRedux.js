@@ -20,7 +20,11 @@ export const actionCreators = {
 }
 
 const initialState = {
-  token: null
+  token: null,
+  currentUser: {
+  	username: "mack",
+  	profilePictureUrl: "https://scontent-iad3-1.xx.fbcdn.net/v/t1.0-9/29594528_10216013484708749_8925084223292593398_n.jpg?_nc_cat=0&oh=ed7d32a33db3551194665b1fd74ecca7&oe=5BCE81E1",
+  }
 }
 
 export const reducer = (state = initialState, action) => {
