@@ -2,10 +2,12 @@ import React, { Component } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { connect } from 'react-redux'
 import { Router, Stack, Scene, Modal, ActionConst } from 'react-native-router-flux'
+import { Actions } from 'react-native-router-flux'
 
 import Login from './Login'
 import SignUp from './SignUp'
 import Home from './Home'
+import ProfileSettings from './ProfileSettings'
 
 const mapStateToProps = (state) => ({
   currentUser:  state.auth.currentUser
@@ -14,7 +16,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => {
   return {
     gotoProfileSettings: () => {
-      // todo
+      Actions.profileSettings()
     },
   }
 }
@@ -34,9 +36,14 @@ class App extends Component {
             component={Home} 
             title="Tic-Tac-Woah"
             onLeft={gotoProfileSettings}
-            leftButtonImage={{uri: currentUser.profilePictureUrl}}
-            leftButtonIconStyle={styles.barButtonItem}
+            leftTitle={currentUser.avatar}
           />
+          <Scene 
+            key="profileSettings" 
+            component={ProfileSettings} 
+            title="Profile"
+            backTitle=' '
+          /> 
         </Stack>
       </Router>
     )
@@ -45,12 +52,7 @@ class App extends Component {
 }
 
 const styles = StyleSheet.create({
-  barButtonItem: {
-    width: 24,
-    height: 24,
-    borderRadius: 12,
-    resizeMode: 'center',
-  }
+
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)
