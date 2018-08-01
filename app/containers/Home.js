@@ -14,7 +14,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => {
   return {
     gamePressed: (game) => {
-      dispatch(gameListActionCreators.fetchGames())
+      dispatch(gameListActionCreators.selectGame(game))
     },
     fetchGames: () => {
       dispatch(gameListActionCreators.fetchGames())

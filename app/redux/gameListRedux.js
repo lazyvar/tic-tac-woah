@@ -1,11 +1,14 @@
 import TicTacWoahAPI from '../service/TicTacWoahAPI'
+import { Actions } from 'react-native-router-flux'
 
 const api = new TicTacWoahAPI()
 
 const types = {
   FETCH_GAMES_PENDING: 'FETCH_POSTS_PENDING',
   FETCH_GAMES_SUCCESS: 'FETCH_POSTS_SUCCESS',
-  FETCH_GAMES_FAILURE: 'FETCH_POSTS_FAILURE'
+  FETCH_GAMES_FAILURE: 'FETCH_POSTS_FAILURE',
+  SELECTED_GAME: 'SELECTED_GAME',
+  DESELECTED_GAME: 'SELECTED_GAME',
 }
 
 export const actionCreators = {
@@ -16,6 +19,13 @@ export const actionCreators = {
   		.then((response) => {
   			dispatch({type: types.FETCH_GAMES_SUCCESS, payload: response.games})
   		})
+  },
+  selectGame: (game) => (dispatch) => {
+    dispatch({type: types.SELECTED_GAME, payload: game})
+    Actions.push("game")
+  },
+  exitGameScreen: () => (dispatch) => {
+    Actions.pop()
   }
 }
 
@@ -42,8 +52,14 @@ export const reducer = (state = initialState, action) => {
         games: payload
 	   }
   	}
+    case types.SELECTED_GAME: {
+      return {
+        ...state,
+        selectedGame: payload
+     }
+    }
   	default: {
    		return state
-	}
+	 }
   }
 }

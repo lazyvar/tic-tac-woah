@@ -4,9 +4,12 @@ import { connect } from 'react-redux'
 import { Router, Stack, Scene, Modal, ActionConst } from 'react-native-router-flux'
 import { Actions } from 'react-native-router-flux'
 
+import { gameListActionCreators, authActionCreators } from '../redux'
+
 import Login from './Login'
 import SignUp from './SignUp'
 import Home from './Home'
+import Game from './Game'
 import ProfileSettings from './ProfileSettings'
 
 const mapStateToProps = (state) => ({
@@ -18,13 +21,16 @@ const mapDispatchToProps = (dispatch) => {
     gotoProfileSettings: () => {
       Actions.profileSettings()
     },
+    exitGameScreen: () => {
+      dispatch(gameListActionCreators.exitGameScreen())
+    }
   }
 }
 
 class App extends Component {
 
   render() {
-    const { gotoProfileSettings, currentUser } = this.props
+    const { gotoProfileSettings, currentUser, exitGameScreen } = this.props
 
     return (
       <Router>
@@ -43,6 +49,12 @@ class App extends Component {
             component={ProfileSettings} 
             title="Profile"
             backTitle=' '
+          />
+          <Scene 
+            key="game" 
+            component={Game} 
+            backTitle=' '
+            onBack={exitGameScreen}
           /> 
         </Stack>
       </Router>
