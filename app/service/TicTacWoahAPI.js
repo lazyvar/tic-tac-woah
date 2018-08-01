@@ -13,7 +13,10 @@ export default class TicTacWoahAPI {
 
   login = (username, password) => (
     new Promise((resolve, reject) => {
-      resolve({token: "8675309"})
+        this.sleep(200)
+          .then(() => {
+            resolve({token: "8675309"})
+          })
     })
   )
 
