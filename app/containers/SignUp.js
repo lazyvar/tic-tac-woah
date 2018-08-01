@@ -5,14 +5,10 @@ import { Actions } from 'react-native-router-flux'
 import FormButton from '../components/FormButton'
 import FormTextField from '../components/FormTextField'
 
-export default class Login extends Component {
-
-  loginPressed = () => {
-
-  }
+export default class SignUp extends Component {
 
   signUpPressed = () => {
-    Actions.signUp()
+
   }
 
   render() {
@@ -20,9 +16,7 @@ export default class Login extends Component {
       <ScrollView>
         <FormTextField placeholder='Username'/>
         <FormTextField placeholder='Password'/>
-        <FormButton onPress={this.loginPressed}>
-          Login 
-        </FormButton>
+        <FormTextField placeholder='Confirm Password'/>
         <FormButton backgroundColor='lightgray' onPress={this.signUpPressed}>
           Sign Up
         </FormButton>
