@@ -35,21 +35,6 @@ class App extends Component {
     return (
       <Router>
         <Stack key="root">
-          <Scene key="login" component={Login} navTransparent={true} />
-          <Scene key="signUp" component={SignUp} title="Sign Up" />
-          <Scene 
-            key="home" 
-            component={Home} 
-            title="Tic-Tac-Woah"
-            onLeft={gotoProfileSettings}
-            leftTitle={currentUser.avatar}
-          />
-          <Scene 
-            key="profileSettings" 
-            component={ProfileSettings} 
-            title="Profile"
-            backTitle=' '
-          />
           <Scene 
             key="game" 
             component={Game} 
