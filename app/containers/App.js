@@ -29,7 +29,7 @@ class App extends Component {
     return (
       <Router>
         <Stack key="root">
-          <Scene key="login" component={Login} title="Welcome" />
+          <Scene key="login" component={Login} navTransparent={true} />
           <Scene key="signUp" component={SignUp} title="Sign Up" />
           <Scene 
             key="home" 

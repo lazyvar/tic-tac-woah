@@ -72,9 +72,10 @@ class ProfileSettings extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    borderColor: 'white',
+    borderColor: 'whitesmoke',
   },
   row: {
+    backgroundColor: 'whitesmoke',
     borderBottomColor: 'rgb(232, 232, 232)',
   },
   rightTitleStyle: {

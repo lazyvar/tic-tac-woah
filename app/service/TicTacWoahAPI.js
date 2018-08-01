@@ -35,26 +35,31 @@ export default class TicTacWoahAPI {
                   {
                     player: {
                       username: "outsider",
+                      avatar: "😡" 
                     },
                     myTurn: true
                   },{
                     player: {
                       username: "bean",
+                      avatar: "🙂",
                     },
                     myTurn: false
                   }, {
                     player: {
                       username: "suarjio",
+                      avatar: "🤗",
                     },
                     myTurn: false
                   }, {
                     player: {
                       username: "coulder",
+                      avatar: "🤩",
                     },
                     myTurn: true
                   }, {
                     player: {
                       username: "jellybean",
+                      avatar: "🤔",
                     },
                     myTurn: false
                   }  

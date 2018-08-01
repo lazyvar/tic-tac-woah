@@ -1,18 +1,20 @@
 import React, { Component } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native'
+import { View, RefreshControl, FlatList, StyleSheet, TouchableOpacity, ScrollView } from 'react-native'
 import { Actions } from 'react-native-router-flux'
 import { connect } from 'react-redux'
 import { gameListActionCreators } from '../redux'
+import { ListItem } from 'react-native-elements'
 import PropTypes from 'prop-types';
 
 const mapStateToProps = (state) => ({
   games: state.gameList.games,
+  isFetching: state.gameList.isFetching,
 })
 
 const mapDispatchToProps = (dispatch) => {
   return {
     gamePressed: (game) => {
-
+      dispatch(gameListActionCreators.fetchGames())
     },
     fetchGames: () => {
       dispatch(gameListActionCreators.fetchGames())
@@ -22,20 +24,37 @@ const mapDispatchToProps = (dispatch) => {
 
 class Home extends Component {
 
-  renderGame = (game) => {
+  renderItem = ({ item }) => {
     const { gamePressed } = this.props
-    let text
-    if (game.myTurn) {
-      text = "Your move against " + game.player.username
-    } else {
-      text = game.player.username + "'s turn"
-    }
+    const title = this.titleForGame(item)
+    const titleStyle = this.styleForGame(item)
 
     return (
-      <TouchableOpacity style={styles.game} onPress={() => gamePressed(game)}>
-        <Text>{text}</Text>
-      </TouchableOpacity>
+      <ListItem
+          key={item.id}
+          title={title}
+          titleStyle={titleStyle}
+          onPress={() => gamePressed(item)}
+          containerStyle={styles.row}
+          chevron
+      />
     )
+  }
+
+  styleForGame = (game) => {
+    if (game.myTurn) {
+      return styles.bold
+    } else {
+      return null
+    }
+  }
+
+   titleForGame = (game) => {
+    if (game.myTurn) {
+      return `${game.player.avatar} Your move against ${game.player.username}`
+    } else {
+      return `${game.player.avatar} ${game.player.username} is thinking...`
+    }
   }
 
   componentDidMount() {
@@ -44,22 +63,39 @@ class Home extends Component {
     fetchGames()
   }
 
+  keyExtractor = (item, index) => index.toString()
+
   render() {
-    const {games} = this.props
+    const {games, isFetching, fetchGames} = this.props
 
     return (
-      <ScrollView>
-        {games.map(this.renderGame)}
-      </ScrollView>
+        <FlatList
+          containerStyle={styles.container}
+          keyExtractor={this.keyExtractor}
+          data={games}
+          renderItem={this.renderItem}
+          refreshControl={
+            <RefreshControl
+              refreshing={isFetching}
+              onRefresh={fetchGames}
+            />
+          }
+        />
     )
   }
+
 }
 
 const styles = StyleSheet.create({
-  game: {
-    backgroundColor: 'whitesmoke',
-    marginBottom: 1,
-    padding: 15,
+  container: {
+    borderColor: 'whitesmoke',
+  },
+  row: {
+    borderBottomColor: 'rgb(232, 232, 232)',
+    backgroundColor: 'whitesmoke'
+  },
+  bold: {
+    fontWeight: 'bold'
   },
 })
 
