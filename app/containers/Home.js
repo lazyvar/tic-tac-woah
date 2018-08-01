@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { View, RefreshControl, FlatList, StyleSheet, TouchableOpacity, ScrollView } from 'react-native'
 import { Actions } from 'react-native-router-flux'
 import { connect } from 'react-redux'
-import { gameListActionCreators } from '../redux'
+import { gameListActionCreators, gameActionCreators } from '../redux'
 import { ListItem } from 'react-native-elements'
 import PropTypes from 'prop-types';
 
@@ -14,7 +14,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => {
   return {
     gamePressed: (game) => {
-      dispatch(gameListActionCreators.selectGame(game))
+      dispatch(gameActionCreators.selectGame(game))
     },
     fetchGames: () => {
       dispatch(gameListActionCreators.fetchGames())

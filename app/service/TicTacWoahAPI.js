@@ -33,36 +33,13 @@ export default class TicTacWoahAPI {
             resolve({
                 games: [
                   {
+                    moves: [{moveNumber: 0, i: 0, j: 0}, {moveNumber: 1, i: 0, j: 2}],
                     player: {
                       username: "outsider",
                       avatar: "😡" 
                     },
                     myTurn: true
-                  },{
-                    player: {
-                      username: "bean",
-                      avatar: "🙂",
-                    },
-                    myTurn: false
-                  }, {
-                    player: {
-                      username: "suarjio",
-                      avatar: "🤗",
-                    },
-                    myTurn: false
-                  }, {
-                    player: {
-                      username: "coulder",
-                      avatar: "🤩",
-                    },
-                    myTurn: true
-                  }, {
-                    player: {
-                      username: "jellybean",
-                      avatar: "🤔",
-                    },
-                    myTurn: false
-                  }  
+                  }
                 ]
             })
           })

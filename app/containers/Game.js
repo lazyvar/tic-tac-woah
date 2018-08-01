@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 import BigBoard from '../components/BigBoard'
 
 const mapStateToProps = (state) => ({
-  game: state.gameList.selectedGame
+
 })
 
 class Game extends Component {
@@ -18,7 +18,7 @@ class Game extends Component {
       <ScrollView>
         <Text> Hello </Text>
         <View style={styles.gameContainer}>
-          <BigBoard game={game} style={styles.bigBoard}/>
+          <BigBoard style={styles.bigBoard}/>
         </View>
         <Text> Your move against </Text>
       </ScrollView>
@@ -26,12 +26,10 @@ class Game extends Component {
   }
 }
 
-const width = Dimensions.get('window').width
-
 const styles = StyleSheet.create({
   gameContainer: {
-    width: width,
-    height: width
+    width: "100%",
+    height: Dimensions.get('window').width
   },
 })
 

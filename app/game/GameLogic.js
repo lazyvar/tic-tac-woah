@@ -9,16 +9,19 @@ export default class GameLogic {
   }
 
   computeBoard = () => {
-  	let board = new Array(81).fill(0)
+    const board = []
+    for (let i = 0; i < 9; i++) {
+      board.push(new Array(9).fill(0))
+    }
 
-  	this.gameState.moves.forEach((move, index) => {
-  		board[move.location] = index % 2 == 0 ? 1 : 2
+  	this.gameState.moves.forEach((move) => {
+  		board[move.i][move.j] = move.moveNumber % 2 == 0 ? 1 : 2
   	})
 
   	return board
   }
 
-  makeMove = (location) => {
+  makeMove = (i, j) => {
 
   }
 

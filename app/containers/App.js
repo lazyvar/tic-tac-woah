@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { Router, Stack, Scene, Modal, ActionConst } from 'react-native-router-flux'
 import { Actions } from 'react-native-router-flux'
 
-import { gameListActionCreators, authActionCreators } from '../redux'
+import { gameListActionCreators, gameActionCreators, authActionCreators } from '../redux'
 
 import Login from './Login'
 import SignUp from './SignUp'
@@ -22,7 +22,7 @@ const mapDispatchToProps = (dispatch) => {
       Actions.profileSettings()
     },
     exitGameScreen: () => {
-      dispatch(gameListActionCreators.exitGameScreen())
+      dispatch(gameActionCreators.exitGameScreen())
     }
   }
 }

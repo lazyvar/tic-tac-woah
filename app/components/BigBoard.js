@@ -1,68 +1,50 @@
 import React, { Component } from 'react'
 import { View, Text, StyleSheet } from 'react-native'
+import { connect } from 'react-redux'
 
 import GameLogic from '../game/GameLogic'
-
 import SmallBoard from './SmallBoard'
 
-export default class BigBoard extends Component {
+const mapStateToProps = (state) => ({
 
-  state = {
-    
-  }
+})
 
-  componentWillReceiveProps(nextProps) {
-    const { gameLogic } = nextProps
-
-    this.setState({gameLogic})
-  }
-
-  componentDidMount() {
-    const gameLogic = new GameLogic({
-      moves: [{move: 0, location: 2}, {move: 1, location: 8}],
-      player1: "mack",
-      player2: "kcam",
-    })
-
-    this.setState({gameLogic})
-  }
+class BigBoard extends Component {
 
   render() {
-    const { gameLogic } = this.state
-
     return (
       <View style={styles.container}>
         <View style={styles.row}>
           <View style={styles.column}>
-            <SmallBoard />
+            <SmallBoard i={0}/>
           </View>
           <View style={styles.column}>
-            <SmallBoard />
+            <SmallBoard i={1}/>
           </View>
           <View style={styles.column}>
-            <SmallBoard />
-          </View>
-        </View>
-        <View style={styles.row}>
-          <View style={styles.column}>
-            <SmallBoard />
-          </View>
-          <View style={styles.column}>
-            <SmallBoard />
-          </View>
-          <View style={styles.column}>
-            <SmallBoard />
+            <SmallBoard i={2}/>
           </View>
         </View>
         <View style={styles.row}>
           <View style={styles.column}>
-            <SmallBoard />
+            <SmallBoard i={3}/>
           </View>
           <View style={styles.column}>
-            <SmallBoard />
+            <SmallBoard i={4}/>
           </View>
           <View style={styles.column}>
-            <SmallBoard />
+            <SmallBoard i={5}/>
+          </View>
+        </View>
+        <View style={styles.row}>
+          <View style={styles.column}>
+            <SmallBoard i={6}/>
+          </View>
+          <View style={styles.column}>
+            <SmallBoard i={7}/>
+          </View>
+          <View style={styles.column}>
+            <SmallBoard i={8}/>
           </View>
         </View>
       </View>
@@ -84,3 +66,5 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
   },
 })
+
+export default connect(mapStateToProps)(BigBoard)
