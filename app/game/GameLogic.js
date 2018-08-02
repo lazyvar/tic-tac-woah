@@ -1,19 +1,23 @@
 /*
-
-
+  GamesLogic.js
+  
+  Handles all game state logic
 */
 export default class GameLogic {
 
+  /* created from a gameState object which primarily contains an array of moves */
   constructor(gameState) {
     this.gameState = gameState
   }
 
+  /* it's my turn if I am player 1 and the move count is even */
   isMyTurn = () => {
     const { moves } = this.gameState
 
     return this.gameState.iAmPlayer1 && moves.length % 2 == 0
   }
 
+  /* creates a 2D array represnting the board state given the gameState move list */
   computeBoard = () => {
     const board = []
     for (let i = 0; i < 9; i++) {
@@ -27,19 +31,37 @@ export default class GameLogic {
   	return board
   }
 
-  playableBigBoardSquares = (bigBoardsSmushed) => {
+  /* 
+    calculates a 1D array for the state of the big board 
+    Grid position goes like
+    0 | 1 | 2
+    3 | 4 | 5
+    6 | 7 | 8
+  */
+  bigBoardSquares = (board) => {
+    let bigBoardState = []
+
+    for (let i = 0; i < 9; i++) {
+      bigBoardState.push(GameLogic.boardState(board[i]))
+    }
+
+    return bigBoardState
+  }
+
+  /* returns an array of small boards where moves are allowed to be made */ 
+  playableSmallBoards = (bigBoardSquares) => {
     const lastMove = this.gameState.moves.slice(-1)[0]
     const j = lastMove.j
-    const smallBoardState = bigBoardsSmushed[j]
+    const smallBoardState = bigBoardSquares[j]
 
     if (smallBoardState == 0) {
       return [j]
     } else {
       let playableBoards = []
       
-      for (let a = 0; a < 9; a++) {
-        if (bigBoardsSmushed[a] === 0) {
-          playableBoards.push(a)
+      for (let index = 0; index < 9; index++) {
+        if (bigBoardSquares[index] === 0) {
+          playableBoards.push(index)
         }
       }
 
@@ -47,17 +69,15 @@ export default class GameLogic {
     }
   }
 
-  bigBoardsSmushed = (board) => {
-    let smushed = []
-
-    for (let i = 0; i < 9; i++) {
-      smushed.push(this.boardState(board[i]))
-    }
-
-    return smushed
-  }
-
-  boardState = (squares) => {
+  /* 
+    determines the current state of affairs i.e. calculating a win 
+    board state enum defined as
+      0: no winner
+      1: player1
+      2: player2
+    :)
+  */
+  static boardState = (squares) => {
     const lines = [
       [0, 1, 2],
       [3, 4, 5],
@@ -78,10 +98,6 @@ export default class GameLogic {
     }
 
     return 0
-  }
-
-  makeMove = (i, j) => {
-
   }
 
 }

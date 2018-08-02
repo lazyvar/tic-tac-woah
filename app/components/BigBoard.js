@@ -1,62 +1,109 @@
 import React, { Component } from 'react'
-import { View, Text, StyleSheet } from 'react-native'
-import { connect } from 'react-redux'
+import { View, StyleSheet } from 'react-native'
+
+import PropTypes from 'prop-types'
 
 import GameLogic from '../game/GameLogic'
 import SmallBoard from './SmallBoard'
 
-const mapStateToProps = (state) => ({
-  playableSmallBoards: state.game.playableSmallBoards
-})
+export default class BigBoard extends Component {
 
-class BigBoard extends Component {
+  static propTypes = {
+    potentialMove: PropTypes.any,
+    board: PropTypes.array.isRequired,
+    bigBoardSquares: PropTypes.array.isRequired,
+    isMyTurn: PropTypes.bool.isRequired,
+    playableSmallBoards: PropTypes.array.isRequired,
+    selectSquare: PropTypes.func.isRequired,
+  }
 
-  styleForSmallBoard = (i) => {
-    const { playableSmallBoards } = this.props
+  boardStyle = (i) => {
+    const baseStyle = [styles.column]
+    const borderStyle = this.borderStyle(i)
+    const playableStyle = this.playableStyle(i)
 
-    if (playableSmallBoards && playableSmallBoards.includes(i)) {
-      return styles.playable
-    } else {
-      return null
+    return baseStyle.concat(borderStyle).concat(playableStyle)
+  }
+
+  borderStyle = (i) => {
+    switch (i) {
+      case 0: {
+        return [styles.rightBorder, styles.bottomBorder]
+      }
+      case 1: {
+        return [styles.leftBorder, styles.bottomBorder, styles.rightBorder]
+      }
+      case 2: {
+        return [styles.leftBorder, styles.bottomBorder]
+      }
+      case 3: {
+        return [styles.topBorder, styles.rightBorder, styles.bottomBorder]
+      }
+      case 4: {
+        return [styles.topBorder, styles.rightBorder, styles.bottomBorder, styles.leftBorder]
+      }
+      case 5: {
+        return [styles.leftBorder, styles.topBorder, styles.bottomBorder]
+      }
+      case 6: {
+        return [styles.topBorder, styles.rightBorder]
+      }
+      case 7: {
+        return [styles.leftBorder, styles.topBorder, styles.rightBorder]
+      }
+      case 8: {
+        return [styles.leftBorder, styles.topBorder]
+      }
+      default: {
+        return []
+      }
     }
   }
 
+  playableStyle = (i) => {    
+    const { playableSmallBoards } = this.props
+
+    return playableSmallBoards.includes(i) ? [styles.playable] : []
+  }
+
+  renderRow = (r) => {
+    const { potentialMove, selectSquare, board, isMyTurn, playableSmallBoards } = this.props
+
+    return (
+       <View style={styles.row} key={`bigBoard ${r}`}>
+        { 
+          [0, 1, 2].map((index) => {
+            const i = 3 * r + index
+            const boardStyle = this.boardStyle(i)
+            const squareStates = board[i]
+            const boardState = GameLogic.boardState(squareStates)
+            const enabled = isMyTurn && playableSmallBoards.includes(i)
+
+            return ( 
+              <View style={boardStyle} key={`bigBoard ${r} smallBoard ${i}`}>
+                <SmallBoard 
+                  i={i}
+                  potentialMove={potentialMove}
+                  selectSquare={selectSquare}
+                  boardState={boardState}
+                  squareStates={squareStates}
+                  enabled={enabled}
+              />
+              </View>
+            )
+          })
+        }
+       </View>
+    )
+  }
+
   render() {
+    const { gameState, potentialMove } = this.props
+
+
     return (
       <View style={styles.container}>
-        <View style={styles.row}>
-          <View style={[styles.column, styles.rightBorder, styles.bottomBorder, this.styleForSmallBoard(0)]}>
-            <SmallBoard i={0}/>
-          </View>
-          <View style={[styles.column, styles.leftBorder, styles.bottomBorder, styles.rightBorder, this.styleForSmallBoard(1)]}>
-            <SmallBoard i={1}/>
-          </View>
-          <View style={[styles.column, styles.leftBorder, styles.bottomBorder, this.styleForSmallBoard(2)]}>
-            <SmallBoard i={2}/>
-          </View>
-        </View>
-        <View style={styles.row}>
-          <View style={[styles.column, styles.topBorder, styles.rightBorder, styles.bottomBorder, this.styleForSmallBoard(3)]}>
-            <SmallBoard i={3}/>
-          </View>
-          <View style={[styles.column, styles.topBorder, styles.rightBorder, styles.bottomBorder, styles.leftBorder, this.styleForSmallBoard(4)]}>
-            <SmallBoard i={4}/>
-          </View>
-          <View style={[styles.column, styles.leftBorder, styles.topBorder, styles.bottomBorder, this.styleForSmallBoard(5)]}>
-            <SmallBoard i={5}/>
-          </View>
-        </View>
-        <View style={styles.row}>
-          <View style={[styles.column, styles.topBorder, styles.rightBorder, this.styleForSmallBoard(6)]}>
-            <SmallBoard i={6}/>
-          </View>
-          <View style={[styles.column, styles.leftBorder, styles.topBorder, styles.rightBorder, this.styleForSmallBoard(7)]}>
-            <SmallBoard i={7}/>
-          </View>
-          <View style={[styles.column, styles.leftBorder, styles.topBorder, this.styleForSmallBoard(8)]}>
-            <SmallBoard i={8}/>
-          </View>
-        </View>
+        {[0, 1, 2].map(this.renderRow)}
       </View>
     )
   }
@@ -100,5 +147,3 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255, 225, 0, 0.33)',
   },
 })
-
-export default connect(mapStateToProps)(BigBoard)

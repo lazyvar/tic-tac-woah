@@ -104,8 +104,7 @@ const initialState = {
     },
     iAmPlayer1: true
   },
-  playableSmallBoards: [1],
-  selectedSquare: null
+  potentialMove: null
 }
 
 export const reducer = (state = initialState, action) => {
@@ -125,44 +124,39 @@ export const reducer = (state = initialState, action) => {
      }
     }
     case types.SELECTED_SQUARE: {
-      return {
-        ...state,
-        selectedSquare: payload
-     }
-    }
-    case types.CONFRIM_SELECTED_SQUARE: {
       const { gameState } = state
       const { moves } = gameState
-      const { i, j } = state.selectedSquare
-
-      moves.push({moveNumber: moves.length, i, j})
-
-      const newGameState = {
-        ...gameState,
-        moves,
-      }
-
-      const logic = new GameLogic(gameState)
-
-      const isMyTurn = logic.isMyTurn()
-      const board = logic.computeBoard()
-      const smushed = logic.bigBoardsSmushed(board)
-      const playableSmallBoards = logic.playableBigBoardSquares(smushed)
-
       return {
         ...state,
-        selectedSquare: null,
-        gameState: newGameState,
-        isMyTurn,
-        board,
-        smushed,
-        playableSmallBoards,
-      }
+        potentialMove: {
+          moveNumber: moves.length, 
+          i: payload.i, 
+          j: payload.j
+        }
+     }
     }
+    // case types.CONFRIM_SELECTED_SQUARE: {
+    //   const { gameState } = state
+    //   const { moves } = gameState
+    //   const { i, j } = state.potentialMove
+
+    //   moves.push({moveNumber: moves.length, i, j})
+
+    //   const newGameState = {
+    //     ...gameState,
+    //     moves,
+    //   }
+
+    //   return {
+    //     ...state,
+    //     potentialMove: null,
+    //     gameState: newGameState,
+    //   }
+    // }
     case types.DESELECTED_SQUARE: {
       return {
         ...state,
-        selectedSquare: null
+        potentialMove: null
      }
     }    
   	default: {

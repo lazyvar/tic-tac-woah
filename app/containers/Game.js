@@ -9,8 +9,8 @@ import BigBoard from '../components/BigBoard'
 import GameLogic from '../game/GameLogic'
 
 const mapStateToProps = (state) => ({
-  game: state.game.gameState,
-  selectedSquare: state.game.selectedSquare
+  gameState: state.game.gameState,
+  potentialMove: state.game.potentialMove
 })
 
 const mapDispatchToProps = (dispatch) => {
@@ -29,29 +29,45 @@ const mapDispatchToProps = (dispatch) => {
 
 class Game extends Component {
 
-  titleForGame = (game) => {
-    const logic = new GameLogic(game)
-    const isMyTurn = logic.isMyTurn()
+  // titleForGame = (game) => {
+  //   const logic = new GameLogic(game)
+  //   const isMyTurn = logic.isMyTurn()
 
-    const board = logic.computeBoard()
-    const smushed = logic.bigBoardsSmushed(board)
+  //   const board = logic.computeBoard()
+  //   const smushed = logic.bigBoardsSmushed(board)
 
-    if (isMyTurn) {
-      return `${game.player.avatar} Your move against ${game.player.username}`
-    } else {
-      return `${game.player.avatar} ${game.player.username} is thinking...`
-    }
-  }
+  //   if (isMyTurn) {
+  //     return `${game.player.avatar} Your move against ${game.player.username}`
+  //   } else {
+  //     return `${game.player.avatar} ${game.player.username} is thinking...`
+  //   }
+  // }
 
   render() {
-    const { game, selectedSquare, confirmSelectedSquare, cancelSelectedSquare} = this.props
-    const title = this.titleForGame(game)
-    const showButtons = selectedSquare !== null
+    
+    const { gameState, potentialMove, selectSquare, confirmSelectedSquare, cancelSelectedSquare} = this.props
+    const title = ""
+    const showButtons = potentialMove !== null
+
+    /* compute things given gameState */
+    const gameLogic = new GameLogic(gameState)
+    const board = gameLogic.computeBoard()
+    const bigBoardSquares = gameLogic.bigBoardSquares(board)
+    const playableSmallBoards = gameLogic.playableSmallBoards(bigBoardSquares)
+    const isMyTurn = gameLogic.isMyTurn()
 
     return (
       <View style={styles.container}>
         <View style={styles.gameContainer}>
-          <BigBoard style={styles.bigBoard}/>
+          <BigBoard 
+            style={styles.bigBoard} 
+            board={board} 
+            bigBoardSquares={bigBoardSquares}
+            isMyTurn={isMyTurn} 
+            playableSmallBoards={playableSmallBoards} 
+            potentialMove={potentialMove}
+            selectSquare={selectSquare}
+          />
         </View>
         <Text style={styles.textStyle}> {title} </Text>
         <View style={styles.container}>
@@ -82,9 +98,6 @@ const styles = StyleSheet.create({
   textStyle: {
     textAlign: 'center',
     fontSize: 18,
-  },
-  buttonStyle: {
-
   },
   container: {
     flex: 1,
