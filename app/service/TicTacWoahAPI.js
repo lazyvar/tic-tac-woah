@@ -15,7 +15,12 @@ export default class TicTacWoahAPI {
     new Promise((resolve, reject) => {
         this.sleep(200)
           .then(() => {
-            resolve({token: "8675309"})
+            resolve({
+              username: "mack",
+              avatar: "😋",
+              token: "8675309",
+              }
+            )
           })
     })
   )

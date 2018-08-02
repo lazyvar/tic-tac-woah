@@ -100,7 +100,6 @@ export default class BigBoard extends Component {
   render() {
     const { gameState, potentialMove } = this.props
 
-
     return (
       <View style={styles.container}>
         {[0, 1, 2].map(this.renderRow)}

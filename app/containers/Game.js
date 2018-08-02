@@ -29,25 +29,8 @@ const mapDispatchToProps = (dispatch) => {
 
 class Game extends Component {
 
-  // titleForGame = (game) => {
-  //   const logic = new GameLogic(game)
-  //   const isMyTurn = logic.isMyTurn()
-
-  //   const board = logic.computeBoard()
-  //   const smushed = logic.bigBoardsSmushed(board)
-
-  //   if (isMyTurn) {
-  //     return `${game.player.avatar} Your move against ${game.player.username}`
-  //   } else {
-  //     return `${game.player.avatar} ${game.player.username} is thinking...`
-  //   }
-  // }
-
   render() {
-    
     const { gameState, potentialMove, selectSquare, confirmSelectedSquare, cancelSelectedSquare} = this.props
-    const title = ""
-    const showButtons = potentialMove !== null
 
     /* compute things given gameState */
     const gameLogic = new GameLogic(gameState)
@@ -55,6 +38,8 @@ class Game extends Component {
     const bigBoardSquares = gameLogic.bigBoardSquares(board)
     const playableSmallBoards = gameLogic.playableSmallBoards(bigBoardSquares)
     const isMyTurn = gameLogic.isMyTurn()
+    const title = gameLogic.gameMessage()
+    const showButtons = potentialMove !== null
 
     return (
       <View style={styles.container}>

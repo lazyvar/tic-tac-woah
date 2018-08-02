@@ -9,7 +9,7 @@ import FormButton from '../components/FormButton'
 import FormTextField from '../components/FormTextField'
 
 const mapStateToProps = (state) => ({
-  token: state.auth.token 
+  token: state.auth.token,
 })
 
 const mapDispatchToProps = (dispatch) => {
@@ -24,13 +24,6 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 class Login extends Component {
-
-  componentWillReceiveProps(nextProps) {
-    // If we are now logged in, navigate to home screen
-    if (!this.props.token && nextProps.token) {
-      Actions.replace("home")
-    }
-  }
 
   render() {
     const { tryLogin, signUpPressed } = this.props

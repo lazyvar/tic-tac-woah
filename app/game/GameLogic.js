@@ -100,4 +100,16 @@ export default class GameLogic {
     return 0
   }
 
+  /* communication is 🔑 */
+  gameMessage = () => {
+    const isMyTurn = this.isMyTurn()
+    const game = this.gameState
+
+    if (isMyTurn) {
+      return `${game.player.avatar} Your move against ${game.player.username}`
+    } else {
+      return `${game.player.avatar} ${game.player.username} is thinking...`
+    }
+  } 
+
 }

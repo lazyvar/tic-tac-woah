@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Image, TouchableOpacity, StyleSheet, ScrollView } from 'react-native'
+import { Image, TouchableOpacity, StyleSheet, ScrollView, Alert} from 'react-native'
 import { Actions } from 'react-native-router-flux'
 import { connect } from 'react-redux'
 import { List, ListItem } from 'react-native-elements'
@@ -21,6 +21,19 @@ const mapDispatchToProps = (dispatch) => {
     changeAvatar: () => {
       // todo
     },
+    signOut: () => {
+      Alert.alert(
+        'Sign out',
+        'Are you sure you want to sign out?',
+        [
+          {text: 'No', onPress: () => {}, style: 'cancel'},
+          {text: 'Yes', onPress: () => {
+            dispatch(authActionCreators.signOut())
+          }},
+        ],
+      { cancelable: false }
+      )
+    }
   }
 }
 
@@ -42,7 +55,7 @@ class ProfileSettings extends Component {
   }
 
   render() {
-    const { changeUsername, changePassword, changeAvatar, currentUser } = this.props
+    const { changeUsername, changePassword, changeAvatar, signOut, currentUser } = this.props
 
     const rows = [
       {
@@ -57,6 +70,9 @@ class ProfileSettings extends Component {
         title: "Avatar",
         rightTitle: currentUser.avatar,
         onPress: changeAvatar,
+      },{
+        title: "Sign out",
+        onPress: signOut,
       }
     ]
 
