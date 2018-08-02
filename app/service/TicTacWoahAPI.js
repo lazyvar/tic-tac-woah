@@ -25,6 +25,20 @@ export default class TicTacWoahAPI {
     })
   )
 
+  refreshToken = (token) => (
+      new Promise((resolve, reject) => {
+        this.sleep(200)
+          .then(() => {
+            resolve({
+              username: "mack",
+              avatar: "😋",
+              token: "8675309",
+              }
+            )
+          })
+    })
+  )
+
   signUp = (username, password, confirm_password) => (
     new Promise((resolve, reject) => {
       resolve({token: "8675309"})

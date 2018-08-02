@@ -16,6 +16,7 @@ const mapStateToProps = (state) => ({
   currentUser: state.auth.currentUser,
   isFetchingToken: state.auth.isFetchingToken,
   token: state.auth.token,
+  isLoggingIn: state.auth.isLoggingIn,
 })
 
 const mapDispatchToProps = (dispatch) => {
@@ -41,7 +42,7 @@ class App extends Component {
   }
 
   render() {
-    const { token, isFetchingToken, gotoProfileSettings, currentUser, exitGameScreen } = this.props
+    const { token, isLoggingIn, isFetchingToken, gotoProfileSettings, currentUser, exitGameScreen } = this.props
 
     if (isFetchingToken) {
       return <View></View>;

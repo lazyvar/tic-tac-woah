@@ -29,15 +29,24 @@ export const actionCreators = {
   fetchToken: () => (dispatch) => {
     dispatch({type: types.FETCHING_TOKEN})
 
-    AsyncStorage.getItem(TOKEN_KEY).then((token) => {
-      dispatch({type: types.FETCHING_TOKEN_FINISHED, payload: token})
-    })
+    AsyncStorage.getItem(TOKEN_KEY)
+      .then((token) => {
+        api.refreshToken(token)
+          .then((currentUser) => {
+            dispatch({type: types.FETCHING_TOKEN_FINISHED, payload: currentUser})
+          })
+      }).catch((error) => {
+        // todo
+      })
   },
   signOut: () => (dispatch) => {
     clearToken().then(() => {
       Actions.reset("login")
       dispatch({type: types.SIGN_OUT})
     })
+  },
+  fetchCurrentUser: () => (dispatch) => {
+
   }
 }
 
@@ -45,6 +54,7 @@ const initialState = {
   token: null,
   currentUser: null,
   isFetchingToken: true,
+  isLoggingIn: false
 }
 
 export const reducer = (state = initialState, action) => {
@@ -54,6 +64,7 @@ export const reducer = (state = initialState, action) => {
     case types.TRY_LOGIN_PENDING: {
       return {
         ...state,
+        isLoggingIn: true,
       }
   	}
     case types.TRY_LOGIN_SUCCESS: {
@@ -61,6 +72,13 @@ export const reducer = (state = initialState, action) => {
         ...state,
         token: payload.token,
         currentUser: payload,
+        isLoggingIn: false,
+     }
+    }
+    case types.TRY_LOGIN_FAILURE: {
+      return {
+        ...state,
+        isLoggingIn: false,
      }
     }
     case types.FETCHING_TOKEN: {
@@ -72,8 +90,9 @@ export const reducer = (state = initialState, action) => {
     case types.FETCHING_TOKEN_FINISHED: {
       return {
         ...state,
+        token: payload.token,
+        currentUser: payload,
         isFetchingToken: false,
-        token: payload,
      }
     }
     case types.SIGN_OUT: {
