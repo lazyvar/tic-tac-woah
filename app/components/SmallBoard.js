@@ -17,7 +17,7 @@ class SmallBoard extends Component {
       <View style={styles.container}>
         <View style={styles.row}>
           <View style={styles.column}>
-            <Square i={i} j={0} styles={{backgroundColor: 'firebrick'}}/>
+            <Square i={i} j={0} />
           </View>
           <View style={styles.column}>
             <Square i={i} j={1}/>
