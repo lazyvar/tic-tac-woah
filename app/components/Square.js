@@ -3,34 +3,55 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import { connect } from 'react-redux'
 import GameLogic from '../game/GameLogic'
 
+import { gameActionCreators } from '../redux'
+
 const mapStateToProps = (state) => ({
-  game: state.game.gameState
+  game: state.game.gameState,
+  selectedSquare: state.game.selectedSquare
 })
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    selectSquare: (i, j) => {
+      dispatch(gameActionCreators.selectSquare(i, j))
+    },
+  }
+}
 
 class Square extends Component {
 
-  selectionStyle = (selection) => {
+  configuration = (selection) => {
+    const { selectSquare, selectedSquare, i, j, game } = this.props
+
+    if (selectedSquare !== null && selectedSquare.i == i && selectedSquare.j == j) {
+
+      if (game.iAmPlayer1) {
+        return {selectionStyle: styles.player1}
+      } else {
+        return {selectionStyle: styles.player2}
+      }
+    }
+
     switch (selection) {
       case 0:
-        return styles.empty
+        return {selectionStyle: styles.empty, onPress: () => { selectSquare(i, j) }}
       case 1:
-        return styles.player1
+        return {selectionStyle: styles.player1}
       case 2:
-        return styles.player2
+        return {selectionStyle: styles.player2}
     }
   }
 
   render() {
-    const { i, j, game } = this.props
+    const { i, j, game, selectSquare } = this.props
 
     const logic = new GameLogic(game)
     const board = logic.computeBoard()
-    const selectionStyle = this.selectionStyle(board[i][j])
+    const { selectionStyle, onPress } = this.configuration(board[i][j])
 
     return (
-      <View style={[styles.baseStyle, selectionStyle]}>
-
-      </View>
+      <TouchableOpacity onPress={onPress} style={[styles.baseStyle, selectionStyle]}>
+      </TouchableOpacity>
     )
   }
 }
@@ -56,4 +77,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default connect(mapStateToProps)(Square)
+export default connect(mapStateToProps, mapDispatchToProps)(Square)

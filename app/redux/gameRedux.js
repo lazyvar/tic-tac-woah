@@ -6,6 +6,7 @@ const api = new TicTacWoahAPI()
 const types = {
   SELECTED_GAME: 'SELECTED_GAME',
   EXITED_GAME: 'SELECTED_GAME',
+  SELECTED_SQUARE: 'SELECTED_SQUARE',
 }
 
 export const actionCreators = {
@@ -15,6 +16,9 @@ export const actionCreators = {
   },
   exitGameScreen: () => (dispatch) => {
     Actions.pop()
+  },
+  selectSquare: (i, j) => (dispatch) => {
+    dispatch({type: types.SELECTED_SQUARE, payload: {i, j}})
   }
 }
 
@@ -27,6 +31,7 @@ const initialState = {
     },
     iAmPlayer1: true
   },
+  selectedSquare: null
 }
 
 export const reducer = (state = initialState, action) => {
@@ -45,6 +50,12 @@ export const reducer = (state = initialState, action) => {
         gameState: null
      }
     }
+    case types.SELECTED_SQUARE: {
+      return {
+        ...state,
+        selectedSquare: payload
+     }
+    }    
   	default: {
    		return state
 	 }

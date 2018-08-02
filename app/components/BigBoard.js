@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
   column: {
     flex: 1,
     flexDirection: 'column',
-    padding: 6
+    padding: 6,
   },
   topBorder: {
     borderTopWidth: 2,

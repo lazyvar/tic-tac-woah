@@ -7,8 +7,6 @@ const types = {
   FETCH_GAMES_PENDING: 'FETCH_POSTS_PENDING',
   FETCH_GAMES_SUCCESS: 'FETCH_POSTS_SUCCESS',
   FETCH_GAMES_FAILURE: 'FETCH_POSTS_FAILURE',
-  SELECTED_GAME: 'SELECTED_GAME',
-  DESELECTED_GAME: 'SELECTED_GAME',
 }
 
 export const actionCreators = {
@@ -20,13 +18,6 @@ export const actionCreators = {
   			dispatch({type: types.FETCH_GAMES_SUCCESS, payload: response.games})
   		})
   },
-  selectGame: (game) => (dispatch) => {
-    dispatch({type: types.SELECTED_GAME, payload: game})
-    Actions.push("game")
-  },
-  exitGameScreen: () => (dispatch) => {
-    Actions.pop()
-  }
 }
 
 const initialState = {
@@ -52,12 +43,6 @@ export const reducer = (state = initialState, action) => {
         games: payload
 	   }
   	}
-    case types.SELECTED_GAME: {
-      return {
-        ...state,
-        selectedGame: payload
-     }
-    }
   	default: {
    		return state
 	 }
