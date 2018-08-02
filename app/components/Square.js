@@ -7,7 +7,8 @@ import { gameActionCreators } from '../redux'
 
 const mapStateToProps = (state) => ({
   game: state.game.gameState,
-  selectedSquare: state.game.selectedSquare
+  selectedSquare: state.game.selectedSquare,
+  playableSmallBoards: state.game.playableSmallBoards,
 })
 
 const mapDispatchToProps = (dispatch) => {
@@ -43,14 +44,17 @@ class Square extends Component {
   }
 
   render() {
-    const { i, j, game, selectSquare } = this.props
+    const { i, j, game, selectSquare, playableSmallBoards } = this.props
 
     const logic = new GameLogic(game)
     const board = logic.computeBoard()
     const { selectionStyle, onPress } = this.configuration(board[i][j])
 
+    const isMyTurn = new GameLogic(game).isMyTurn()
+    const playable = playableSmallBoards && playableSmallBoards.includes(i)
+
     return (
-      <TouchableOpacity onPress={onPress} style={[styles.baseStyle, selectionStyle]}>
+      <TouchableOpacity disabled={!isMyTurn || !playable} onPress={onPress} style={[styles.baseStyle, selectionStyle]}>
       </TouchableOpacity>
     )
   }

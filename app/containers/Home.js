@@ -4,7 +4,9 @@ import { Actions } from 'react-native-router-flux'
 import { connect } from 'react-redux'
 import { gameListActionCreators, gameActionCreators } from '../redux'
 import { ListItem } from 'react-native-elements'
+
 import PropTypes from 'prop-types';
+import GameLogic from '../game/GameLogic'
 
 const mapStateToProps = (state) => ({
   games: state.gameList.games,
@@ -42,14 +44,16 @@ class Home extends Component {
   }
 
   styleForGame = (game) => {
-    if (game.myTurn) {
+    const isMyTurn = new GameLogic(game).isMyTurn()
+
+    if (isMyTurn) {
       return styles.bold
     } else {
       return null
     }
   }
 
-   titleForGame = (game) => {
+  titleForGame = (game) => {
     if (game.myTurn) {
       return `${game.player.avatar} Your move against ${game.player.username}`
     } else {

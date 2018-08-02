@@ -1,55 +1,65 @@
 import React, { Component } from 'react'
-import { View, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet } from 'react-native'
 import { connect } from 'react-redux'
 
 import Square from './Square'
 
 const mapStateToProps = (state) => ({
-
+  smushed: state.game.smushed
 })
 
 class SmallBoard extends Component {
 
   render() {
-    const { i } = this.props
+    const { i, smushed } = this.props
 
-    return (
-      <View style={styles.container}>
-        <View style={styles.row}>
-          <View style={styles.column}>
-            <Square i={i} j={0} />
+    if (smushed && smushed[i] !== 0) {
+      const playerStyle = smushed[i] === 1 ? styles.player1 : styles.player2
+
+      return (
+        <View >
+          <View style={[styles.finished, playerStyle]}>  </View>
+        </View>
+      )
+    } else {
+      return (
+        <View style={styles.container}>
+          <View style={styles.row}>
+            <View style={styles.column}>
+              <Square i={i} j={0} />
+            </View>
+            <View style={styles.column}>
+              <Square i={i} j={1}/>
+            </View>
+            <View style={styles.column}>
+              <Square i={i} j={2}/>
+            </View>
           </View>
-          <View style={styles.column}>
-            <Square i={i} j={1}/>
+          <View style={styles.row}>
+            <View style={styles.column}>
+              <Square i={i} j={3}/>
+            </View>
+            <View style={styles.column}>
+              <Square i={i} j={4}/>
+            </View>
+            <View style={styles.column}>
+              <Square i={i} j={5}/>
+            </View>
           </View>
-          <View style={styles.column}>
-            <Square i={i} j={2}/>
+          <View style={styles.row}>
+            <View style={styles.column}>
+              <Square i={i} j={6}/>
+            </View>
+            <View style={styles.column}>
+              <Square i={i} j={7}/>
+            </View>
+            <View style={styles.column}>
+              <Square i={i} j={8}/>
+            </View>
           </View>
         </View>
-        <View style={styles.row}>
-          <View style={styles.column}>
-            <Square i={i} j={3}/>
-          </View>
-          <View style={styles.column}>
-            <Square i={i} j={4}/>
-          </View>
-          <View style={styles.column}>
-            <Square i={i} j={5}/>
-          </View>
-        </View>
-        <View style={styles.row}>
-          <View style={styles.column}>
-            <Square i={i} j={6}/>
-          </View>
-          <View style={styles.column}>
-            <Square i={i} j={7}/>
-          </View>
-          <View style={styles.column}>
-            <Square i={i} j={8}/>
-          </View>
-        </View>
-      </View>
-    )
+      )
+    }
   }
 }
 
@@ -66,8 +76,19 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
   },
-  square: {
-
+  finished: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 8,
+    borderWidth: 1,
+  },
+  player1: {
+    backgroundColor: 'steelblue',
+    borderColor: 'steelblue',
+  },
+  player2: {
+    backgroundColor: 'firebrick',
+    borderColor: 'firebrick',
   }
 })
 
