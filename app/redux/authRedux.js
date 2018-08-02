@@ -8,7 +8,8 @@ const api = new TicTacWoahAPI()
 
 const types = {
   FETCHING_TOKEN: 'FETCHING_TOKEN',
-  FETCHING_TOKEN_FINISHED: 'FETCHING_TOKEN_FINISHED',
+  FETCHING_TOKEN_SUCCESS: 'FETCHING_TOKEN_SUCCESS',
+  FETCHING_TOKEN_FAILURE: 'FETCHING_TOKEN_FAILURE',
   SIGN_OUT: 'SIGN_OUT',
   TRY_LOGIN_PENDING: 'TRY_LOGIN_PENDING',
   TRY_LOGIN_SUCCESS: 'TRY_LOGIN_SUCCESS',
@@ -31,22 +32,22 @@ export const actionCreators = {
 
     AsyncStorage.getItem(TOKEN_KEY)
       .then((token) => {
-        api.refreshToken(token)
+        if (token == null) {
+            dispatch({type: types.FETCHING_TOKEN_FAILURE})
+        } else {
+          api.refreshToken(token)
           .then((currentUser) => {
-            dispatch({type: types.FETCHING_TOKEN_FINISHED, payload: currentUser})
+            dispatch({type: types.FETCHING_TOKEN_SUCCESS, payload: currentUser})
           })
-      }).catch((error) => {
-        // todo
+        }
       })
   },
   signOut: () => (dispatch) => {
-    clearToken().then(() => {
-      Actions.reset("login")
-      dispatch({type: types.SIGN_OUT})
-    })
-  },
-  fetchCurrentUser: () => (dispatch) => {
-
+    AsyncStorage.removeItem(TOKEN_KEY)
+      .then(() => {
+        Actions.reset("login")
+        dispatch({type: types.SIGN_OUT})
+      })
   }
 }
 
@@ -87,11 +88,17 @@ export const reducer = (state = initialState, action) => {
         isFetchingToken: true,
      }
     }
-    case types.FETCHING_TOKEN_FINISHED: {
+    case types.FETCHING_TOKEN_SUCCESS: {
       return {
         ...state,
         token: payload.token,
         currentUser: payload,
+        isFetchingToken: false,
+     }
+    }
+    case types.FETCHING_TOKEN_FAILURE: {
+      return {
+        ...state,
         isFetchingToken: false,
      }
     }
