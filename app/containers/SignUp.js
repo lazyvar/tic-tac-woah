@@ -99,7 +99,7 @@ class SignUp extends Component {
         <ListItem
           title={"Avatar"}
           rightTitle={avatar}
-          style={styles.row}
+          containerStyle={styles.row}
           rightTitleStyle={styles.rightTitleStyle}
           onPress={this.changeAvatar}
           chevron
@@ -114,7 +114,7 @@ class SignUp extends Component {
 
 const styles = StyleSheet.create({
   row: {
-    backgroundColor: 'white',
+    backgroundColor: 'rgb(240, 240, 240)',
     borderBottomColor: 'rgb(232, 232, 232)',
   },
   error: {

@@ -25,9 +25,6 @@ const mapDispatchToProps = (dispatch) => {
     gotoProfileSettings: () => {
       Actions.profileSettings()
     },
-    exitGameScreen: () => {
-      dispatch(gameActionCreators.exitGameScreen())
-    },
     fetchToken: () => {
       dispatch(authActionCreators.fetchToken())
     }
@@ -43,7 +40,7 @@ class App extends Component {
   }
 
   render() {
-    const { token, isLoggingIn, isFetchingToken, gotoProfileSettings, currentUser, exitGameScreen } = this.props
+    const { token, isLoggingIn, isFetchingToken, gotoProfileSettings, currentUser } = this.props
 
     if (isFetchingToken) {
       return <View></View>;
@@ -75,10 +72,8 @@ class App extends Component {
             key="game" 
             component={Game} 
             backTitle=' '
-            onBack={exitGameScreen}
           /> 
-                  <Modal key="selectAvatar" component={SelectAvatar} />
-
+          <Modal key="selectAvatar" component={SelectAvatar} />
         </Stack>
       </Router>
     )

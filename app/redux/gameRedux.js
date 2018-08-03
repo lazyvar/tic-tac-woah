@@ -23,9 +23,6 @@ export const actionCreators = {
     Actions.push("game")
     return {type: types.SELECTED_GAME, payload: game}
   },
-  exitGameScreen: () => {
-    Actions.pop()
-  },
   selectSquare: (i, j) => {
     return {type: types.SELECTED_SQUARE, payload: {i, j}}
   },
