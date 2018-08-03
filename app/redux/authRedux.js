@@ -14,6 +14,9 @@ const types = {
   TRY_LOGIN_PENDING: 'TRY_LOGIN_PENDING',
   TRY_LOGIN_SUCCESS: 'TRY_LOGIN_SUCCESS',
   TRY_LOGIN_FAILURE: 'TRY_LOGIN_FAILURE',
+  TRY_SIGNUP_PENDING: 'TRY_SIGNUP_PENDING',
+  TRY_SIGNUP_SUCCESS: 'TRY_SIGNUP_SUCCESS',
+  TRY_SIGNUP_FAILURE: 'TRY_SIGNUP_FAILURE',
 }
 
 export const actionCreators = {
@@ -28,6 +31,24 @@ export const actionCreators = {
         Actions.replace("home")
   		}).catch((error) => {
         dispatch({type: types.TRY_LOGIN_FAILURE, payload: error})
+      })
+  },
+  signUp: (username, password, confirmPassword, avatar) => (dispatch) => {
+    dispatch({type: types.TRY_SIGNUP_PENDING, payload: Date.now()})
+
+    if (password !== confirmPassword) {
+      dispatch({type: types.TRY_SIGNUP_FAILURE, payload: {message: "Passwords do not match"}})
+      return
+    }
+
+    api.signUp(username, password, confirmPassword, avatar)
+      .then((response) => {
+        dispatch({type: types.TRY_SIGNUP_SUCCESS, payload: response})
+        AsyncStorage.setItem(TOKEN_KEY, response.token)
+        api.setToken(response.token)
+        Actions.replace("home")
+      }).catch((error) => {
+        dispatch({type: types.TRY_SIGNUP_FAILURE, payload: error})
       })
   },
   fetchToken: () => (dispatch) => {
@@ -61,11 +82,11 @@ const initialState = {
   isFetchingToken: true,
   isLoggingIn: false,
   errorMessage: null,
+  signUpErrorMessage: null
 }
 
 export const reducer = (state = initialState, action) => {
   const {type, payload} = action
-
   switch(type) {
     case types.TRY_LOGIN_PENDING: {
       return {
@@ -116,8 +137,27 @@ export const reducer = (state = initialState, action) => {
         currentUser: null,
      }
     }
+    case types.TRY_SIGNUP_PENDING: {
+      return {
+        ...state,
+        signUpErrorMessage: null,
+      }
+    }
+    case types.TRY_SIGNUP_SUCCESS: {
+      return {
+        ...state,
+        token: payload.token,
+        currentUser: payload,
+     }
+    }
+    case types.TRY_SIGNUP_FAILURE: {
+      return {
+        ...state,
+        signUpErrorMessage: payload.message
+     }
+    }
   	default: {
    		return state
-	}
+	  }
   }
 }
