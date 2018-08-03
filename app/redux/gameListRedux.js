@@ -1,12 +1,12 @@
 import TicTacWoahAPI from '../service/TicTacWoahAPI'
 import { Actions } from 'react-native-router-flux'
 
-const api = new TicTacWoahAPI()
+const api = TicTacWoahAPI.shared()
 
 const types = {
-  FETCH_GAMES_PENDING: 'FETCH_POSTS_PENDING',
-  FETCH_GAMES_SUCCESS: 'FETCH_POSTS_SUCCESS',
-  FETCH_GAMES_FAILURE: 'FETCH_POSTS_FAILURE',
+  FETCH_GAMES_PENDING: 'FETCH_GAMES_PENDING',
+  FETCH_GAMES_SUCCESS: 'FETCH_GAMES_SUCCESS',
+  FETCH_GAMES_FAILURE: 'FETCH_GAMES_FAILURE',
 }
 
 export const actionCreators = {
@@ -14,9 +14,11 @@ export const actionCreators = {
   	dispatch({type: types.FETCH_GAMES_PENDING, payload: Date.now()})
 
   	api.getGames()
-  		.then((response) => {
-  			dispatch({type: types.FETCH_GAMES_SUCCESS, payload: response.games})
-  		})
+  		.then((games) => {
+  			dispatch({type: types.FETCH_GAMES_SUCCESS, payload: games})
+  		}).catch((error) => {
+        dispatch({type: types.FETCH_GAMES_FAILURE})
+      })
   },
 }
 
@@ -36,13 +38,19 @@ export const reducer = (state = initialState, action) => {
         isFetching: true,
       }
   	}
-  	case types.FETCH_GAMES_SUCCESS: {
+    case types.FETCH_GAMES_SUCCESS: {
       return {
         ...state,
         isFetching: false,
         games: payload
-	   }
-  	}
+     }
+    }
+    case types.FETCH_GAMES_FAILURE: {
+      return {
+        ...state,
+        isFetching: false,
+     }
+    }
   	default: {
    		return state
 	 }

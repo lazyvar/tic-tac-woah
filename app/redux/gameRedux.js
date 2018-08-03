@@ -2,13 +2,16 @@ import TicTacWoahAPI from '../service/TicTacWoahAPI'
 import { Actions } from 'react-native-router-flux'
 import GameLogic from '../game/GameLogic'
 
-const api = new TicTacWoahAPI()
+const api = TicTacWoahAPI.shared()
 
 const types = {
   SELECTED_GAME: 'SELECTED_GAME',
   EXITED_GAME: 'SELECTED_GAME',
   SELECTED_SQUARE: 'SELECTED_SQUARE',
   DESELECTED_SQUARE: 'DESELECTED_SQUARE',
+  MAKING_MOVE: 'MAKING_MOVE',
+  MAKING_MOVE_SUCCESS: 'MAKING_MOVE_SUCCESS',
+  MAKING_MOVE_FAILURE: 'MAKING_MOVE_FAILURE',
 }
 
 export const actionCreators = {
@@ -22,8 +25,14 @@ export const actionCreators = {
   selectSquare: (i, j) => {
     return {type: types.SELECTED_SQUARE, payload: {i, j}}
   },
-  confirmSelectedSquare: () => (dispatch) => {
-    // todo
+  confirmSelectedSquare: (game, i, j) => (dispatch) => {
+    dispatch({type: types.MAKING_MOVE})
+    api.makeMove(game, i, j)
+        .then((newGameState) => {
+          dispatch({type: types.MAKING_MOVE_SUCCESS, payload: newGameState})
+        }).catch((error) => {
+          dispatch({type: types.MAKING_MOVE_FAILURE, payload: error})
+        })
   },
   cancelSelectedSquare: () => {
     return {type: types.DESELECTED_SQUARE}
@@ -32,7 +41,8 @@ export const actionCreators = {
 
 const initialState = {
   gameState: null,
-  potentialMove: null
+  potentialMove: null,
+  isMakingMove: false,
 }
 
 export const reducer = (state = initialState, action) => {
@@ -68,6 +78,26 @@ export const reducer = (state = initialState, action) => {
       return {
         ...state,
         potentialMove: null
+     }
+    }
+    case types.MAKING_MOVE: {
+      return {
+        ...state,
+        isMakingMove: true
+     }
+    }    
+    case types.MAKING_MOVE_SUCCESS: {
+      return {
+        ...state,
+        isMakingMove: false,
+        gameState: payload,
+        potentialMove: null,
+     }
+    }    
+    case types.MAKING_MOVE_FAILURE: {
+      return {
+        ...state,
+        isMakingMove: false
      }
     }    
   	default: {

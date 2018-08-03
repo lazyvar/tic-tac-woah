@@ -4,7 +4,7 @@ import { AsyncStorage } from 'react-native'
 
 const TOKEN_KEY = '@TicTacWoah:token'
 
-const api = new TicTacWoahAPI()
+const api = TicTacWoahAPI.shared()
 
 const types = {
   FETCHING_TOKEN: 'FETCHING_TOKEN',
@@ -24,6 +24,7 @@ export const actionCreators = {
   		.then((response) => {
   			dispatch({type: types.TRY_LOGIN_SUCCESS, payload: response})
         AsyncStorage.setItem(TOKEN_KEY, response.token)
+        api.setToken(response.token)
         Actions.replace("home")
   		}).catch((error) => {
         dispatch({type: types.TRY_LOGIN_FAILURE, payload: error})
@@ -37,8 +38,9 @@ export const actionCreators = {
         if (token == null) {
           dispatch({type: types.FETCHING_TOKEN_FAILURE})
         } else {
-          api.refreshToken(token)
-          .then((currentUser) => {
+          api.setToken(token)
+          api.refreshToken()
+          .then((currentUser) => { 
             dispatch({type: types.FETCHING_TOKEN_SUCCESS, payload: currentUser})
           })
         }
