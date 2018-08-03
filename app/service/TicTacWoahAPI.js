@@ -96,8 +96,8 @@ export default class TicTacWoahAPI {
     return json
   }
 
-  createChallenge = async (username) => {
-    const response = await fetch(`${this.baseUrl}/game/${username}`, {
+  createGame = async (opponentUsername) => {
+    const response = await fetch(`${this.baseUrl}/game/${opponentUsername}`, {
       method: 'POST',
       headers: this.defaultHeaders,
     })

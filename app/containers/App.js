@@ -11,6 +11,7 @@ import SignUp from './SignUp'
 import Home from './Home'
 import Game from './Game'
 import SelectAvatar from '../components/SelectAvatar'
+import CreateGame from './CreateGame'
 import ProfileSettings from './ProfileSettings'
 
 const mapStateToProps = (state) => ({
@@ -27,6 +28,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     fetchToken: () => {
       dispatch(authActionCreators.fetchToken())
+    },
+    createGame: () => {
+      Actions.createGame()
     }
   }
 }
@@ -40,7 +44,7 @@ class App extends Component {
   }
 
   render() {
-    const { token, isLoggingIn, isFetchingToken, gotoProfileSettings, currentUser } = this.props
+    const { token, isLoggingIn, isFetchingToken, gotoProfileSettings, currentUser, createGame } = this.props
 
     if (isFetchingToken) {
       return <View></View>;
@@ -61,6 +65,8 @@ class App extends Component {
             onLeft={gotoProfileSettings}
             initial={userIsAuthenticated}
             leftTitle={homeLeftTitle}
+            rightTitle="Create game"
+            onRight={createGame}
           />
           <Scene 
             key="profileSettings" 
@@ -72,8 +78,9 @@ class App extends Component {
             key="game" 
             component={Game} 
             backTitle=' '
-          /> 
-          <Modal key="selectAvatar" component={SelectAvatar} />
+          />
+          <Scene key="createGame" component={CreateGame} title="Create game"/>
+          <Scene key="selectAvatar" component={SelectAvatar} />
         </Stack>
       </Router>
     )
