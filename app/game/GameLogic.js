@@ -10,11 +10,16 @@ export default class GameLogic {
     this.gameState = gameState
   }
 
+  isPlayer1 = (playerId) => {
+    return this.gameState.player1.id === playerId
+  }
+
   /* it's my turn if I am player 1 and the move count is even */
-  isMyTurn = () => {
+  isMyTurn = (playerId) => {
     const { moves } = this.gameState
 
-    return this.gameState.iAmPlayer1 && moves.length % 2 == 0
+    return this.isPlayer1(playerId) && moves.length % 2 === 0 ||
+           !this.isPlayer1(playerId) && moves.length % 2 === 1
   }
 
   /* creates a 2D array represnting the board state given the gameState move list */
@@ -101,14 +106,22 @@ export default class GameLogic {
   }
 
   /* communication is 🔑 */
-  gameMessage = () => {
-    const isMyTurn = this.isMyTurn()
+  gameMessage = (currentUserId) => {
+    const iAmPlayer1 = this.isPlayer1(currentUserId)
+    const isMyTurn = this.isMyTurn(currentUserId)
     const game = this.gameState
 
-    if (isMyTurn) {
-      return `${game.player.avatar} Your move against ${game.player.username}`
+    let opponent
+    if (iAmPlayer1) {
+      opponent = game.player2
     } else {
-      return `${game.player.avatar} ${game.player.username} is thinking...`
+      opponent = game.player1
+    }
+
+    if (isMyTurn) {
+      return `${opponent.avatar} Your move against ${opponent.username}`
+    } else {
+      return `${opponent.avatar} ${opponent.username} is thinking...`
     }
   } 
 

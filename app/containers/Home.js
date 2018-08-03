@@ -11,6 +11,7 @@ import GameLogic from '../game/GameLogic'
 const mapStateToProps = (state) => ({
   games: state.gameList.games,
   isFetching: state.gameList.isFetching,
+  currentUser: state.auth.currentUser,
 })
 
 const mapDispatchToProps = (dispatch) => {
@@ -44,7 +45,8 @@ class Home extends Component {
   }
 
   styleForGame = (game) => {
-    const isMyTurn = new GameLogic(game).isMyTurn()
+    const { currentUser } = this.props
+    const isMyTurn = new GameLogic(game).isMyTurn(currentUser.id)
 
     if (isMyTurn) {
       return styles.bold
@@ -54,11 +56,10 @@ class Home extends Component {
   }
 
   titleForGame = (game) => {
-    if (game.myTurn) {
-      return `${game.player.avatar} Your move against ${game.player.username}`
-    } else {
-      return `${game.player.avatar} ${game.player.username} is thinking...`
-    }
+    const { currentUser } = this.props
+    const gameLogic = new GameLogic(game)
+    
+    return gameLogic.gameMessage(currentUser.id)
   }
 
   componentDidMount() {
