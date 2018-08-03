@@ -140,8 +140,6 @@ export default class TicTacWoahAPI {
 
     const json = await response.json()
 
-    console.warn(json)
-
     if (response.status != 200) {
       throw json
     }
