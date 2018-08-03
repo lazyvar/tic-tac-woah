@@ -55,7 +55,13 @@ export default class GameLogic {
 
   /* returns an array of small boards where moves are allowed to be made */ 
   playableSmallBoards = (bigBoardSquares) => {
-    const lastMove = this.gameState.moves.slice(-1)[0]
+    const { moves } = this.gameState
+
+    if (moves.length == 0) {
+      return [0, 1, 2, 3, 4, 5, 6, 7, 8]
+    }
+
+    const lastMove = moves.slice(-1)[0]
     const j = lastMove.j
     const smallBoardState = bigBoardSquares[j]
 
