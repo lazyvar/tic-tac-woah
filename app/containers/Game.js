@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import { gameActionCreators } from '../redux'
 
 import FormButton from '../components/FormButton'
+import PlayerLabel from '../components/PlayerLabel'
 import BigBoard from '../components/BigBoard'
 import GameLogic from '../game/GameLogic'
 
@@ -45,10 +46,17 @@ class Game extends Component {
     const bigBoardSquares = gameLogic.bigBoardSquares(board)
     const playableSmallBoards = gameLogic.playableSmallBoards(bigBoardSquares)
     const isMyTurn = gameLogic.isMyTurn(currentUser.id)
-    const title = gameLogic.gameMessage(currentUser.id)
     const showButtons = potentialMove !== null
 
+    let title
+    if (isMyTurn) {
+      title = "Choose wisely."
+    } else {
+      title = "Drink some kombucha while you wait."
+    }
+
     return (
+      <ScrollView>
       <View style={styles.container}>
         <View style={styles.gameContainer}>
           <BigBoard 
@@ -62,7 +70,7 @@ class Game extends Component {
           />
         </View>
         <Text style={styles.textStyle}> {title} </Text>
-        <View style={styles.container}>
+        <PlayerLabel player1={gameState.player1} player2={gameState.player2} />
           { showButtons &&
           <FormButton backgroundColor='firebrick' onPress={cancelSelectedSquare}>
             Cancel
@@ -77,8 +85,8 @@ class Game extends Component {
           </FormButton>
           }
         }
-        </View>
       </View>
+      </ScrollView>
     )
   }
 }
@@ -87,17 +95,21 @@ const styles = StyleSheet.create({
   gameContainer: {
     width: "100%",
     height: Dimensions.get('window').width,
-    marginTop: 24,
-    marginBottom: 12,
   },
   textStyle: {
     textAlign: 'center',
-    fontSize: 18,
+    fontSize: 16,
+    backgroundColor: 'white',
+    padding: 10,
   },
   container: {
     flex: 1,
-    flexDirection: 'column',
+    justifyContent: 'space-between',
+  },
+  buttonContainer: {
+    flex: 1,
     justifyContent: 'flex-end',
+    backgroundColor: 'white',
   }
 })
 
