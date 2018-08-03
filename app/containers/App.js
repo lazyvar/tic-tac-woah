@@ -55,7 +55,7 @@ class App extends Component {
     return (
       <Router>
         <Stack key="root" >
-          <Scene key="login" component={Login} navTransparent={true} initial={userIsAuthenticated}/>
+          <Scene key="login" component={Login} title="Welcome" initial={userIsAuthenticated}/>
           <Scene key="signUp" component={SignUp} title="Sign Up" />
           <Scene 
             key="home" 

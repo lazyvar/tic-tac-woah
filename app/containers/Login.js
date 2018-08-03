@@ -9,7 +9,6 @@ import FormButton from '../components/FormButton'
 import FormTextField from '../components/FormTextField'
 
 const mapStateToProps = (state) => ({
-  token: state.auth.token,
   errorMessage: state.auth.errorMessage
 })
 
@@ -46,6 +45,7 @@ class Login extends Component {
     const { username, password } = this.state
 
     return (
+      <ScrollView>
       <View style={styles.container}>
         <Text style={styles.error}> {errorMessage} </Text>
         <FormTextField 
@@ -67,6 +67,7 @@ class Login extends Component {
           Sign Up
         </FormButton>
       </View>
+      </ScrollView>
     )
   }
 }
@@ -74,7 +75,7 @@ class Login extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center'
+    justifyContent: 'flex-start'
   },
   block: {
     width: 100,
