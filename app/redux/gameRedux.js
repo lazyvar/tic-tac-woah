@@ -1,6 +1,7 @@
 import TicTacWoahAPI from '../service/TicTacWoahAPI'
 import { Actions } from 'react-native-router-flux'
 import GameLogic from '../game/GameLogic'
+import { gameListActionCreators } from './'
 
 const api = TicTacWoahAPI.shared()
 
@@ -30,6 +31,7 @@ export const actionCreators = {
     api.makeMove(game, i, j)
         .then((newGameState) => {
           dispatch({type: types.MAKING_MOVE_SUCCESS, payload: newGameState})
+          dispatch(gameListActionCreators.fetchGames())
         }).catch((error) => {
           dispatch({type: types.MAKING_MOVE_FAILURE, payload: error})
         })
