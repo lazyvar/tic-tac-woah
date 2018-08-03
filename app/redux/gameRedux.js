@@ -13,6 +13,9 @@ const types = {
   MAKING_MOVE: 'MAKING_MOVE',
   MAKING_MOVE_SUCCESS: 'MAKING_MOVE_SUCCESS',
   MAKING_MOVE_FAILURE: 'MAKING_MOVE_FAILURE',
+  RELOAD_GAME_PENDING: 'RELOAD_GAME_PENDING',
+  RELOAD_GAME_SUCCESS: 'RELOAD_GAME_SUCCESS',
+  RELOAD_GAME_FAILURE: 'RELOAD_GAME_FAILURE',
 }
 
 export const actionCreators = {
@@ -38,6 +41,16 @@ export const actionCreators = {
   },
   cancelSelectedSquare: () => {
     return {type: types.DESELECTED_SQUARE}
+  },
+  reloadGame: (gameId) => (dispatch) =>{
+    dispatch({type: types.RELOAD_GAME_PENDING})
+    api.getGame(gameId)
+        .then((response) => {
+          dispatch({type: types.RELOAD_GAME_SUCCESS, payload: response})
+          dispatch(gameListActionCreators.fetchGames())
+        }).catch((error) => {
+          dispatch({type: types.RELOAD_GAME_FAILURE, payload: error})
+        })
   }
 }
 
@@ -45,6 +58,7 @@ const initialState = {
   gameState: null,
   potentialMove: null,
   isMakingMove: false,
+  isReloading: false,
 }
 
 export const reducer = (state = initialState, action) => {
@@ -101,7 +115,26 @@ export const reducer = (state = initialState, action) => {
         ...state,
         isMakingMove: false
      }
-    }    
+    }
+    case types.RELOAD_GAME_PENDING: {
+      return {
+        ...state,
+        isReloading: true,
+      }
+    }
+    case types.RELOAD_GAME_SUCCESS: {
+      return {
+        ...state,
+        isReloading: false,
+        gameState: payload
+     }
+    }
+    case types.RELOAD_GAME_FAILURE: {
+      return {
+        ...state,
+        isReloading: false,
+     }
+    } 
   	default: {
    		return state
 	 }

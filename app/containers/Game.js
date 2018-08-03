@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Dimensions } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Dimensions, RefreshControl } from 'react-native'
 import { Actions } from 'react-native-router-flux'
 import { connect } from 'react-redux'
 import { gameActionCreators } from '../redux'
@@ -13,6 +13,7 @@ const mapStateToProps = (state) => ({
   gameState: state.game.gameState,
   potentialMove: state.game.potentialMove,
   currentUser: state.auth.currentUser,
+  isReloading: state.game.isReloading,
 })
 
 const mapDispatchToProps = (dispatch) => {
@@ -25,11 +26,20 @@ const mapDispatchToProps = (dispatch) => {
     },
     cancelSelectedSquare: () => {
       dispatch(gameActionCreators.cancelSelectedSquare())
+    },
+    reload: (gameId) => {
+      dispatch(gameActionCreators.reloadGame(gameId))
     }
   }
 }
 
 class Game extends Component {
+
+  reload = () => {
+    const { gameState, reload } = this.props
+
+    reload(gameState.id)
+  }
 
   confirmSelectedSquare = () => {
     const { gameState, potentialMove, confirmSelectedSquare } = this.props
@@ -38,7 +48,7 @@ class Game extends Component {
   }
 
   render() {
-    const { gameState, currentUser, potentialMove, selectSquare, cancelSelectedSquare} = this.props
+    const { gameState, currentUser, potentialMove, selectSquare, cancelSelectedSquare, isReloading} = this.props
 
     /* compute things given gameState */
     const gameLogic = new GameLogic(gameState)
@@ -56,7 +66,13 @@ class Game extends Component {
     }
 
     return (
-      <ScrollView>
+      <ScrollView
+        refreshControl={
+          <RefreshControl
+          refreshing={isReloading}
+          onRefresh={this.reload} />
+        }
+      >
       <View style={styles.container}>
         <View style={styles.gameContainer}>
           <BigBoard 
