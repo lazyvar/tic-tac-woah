@@ -3,32 +3,18 @@ import { TextInput, StyleSheet } from 'react-native'
 
 export default class FormTextField extends Component {
 
-  state = {
-    text: '',
-  }
-
-  onChangeText = (text) => this.setState({text})
-
-  onSubmitEditing = () => {
-    const {onSubmitEditing} = this.props
-    const {text} = this.state
-
-    if (onSubmitEditing !== undefined) {
-      onSubmitEditing(text)
-    }
-  }
-
   render() {
-    const {placeholder} = this.props
-    const {text} = this.state
+    const { placeholder, onChangeText, value, secureTextEntry, onSubmitEditing } = this.props
 
     return (
       <TextInput
         style={styles.input}
-        value={text}
+        value={value}
         placeholder={placeholder}
-        onChangeText={this.onChangeText}
-        onSubmitEditing={this.onSubmitEditing}
+        onChangeText={onChangeText}
+        onSubmitEditing={onSubmitEditing}
+        secureTextEntry={secureTextEntry}
+        autoCapitalize={'none'}
       />
     )
   }

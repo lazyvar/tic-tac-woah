@@ -5,25 +5,34 @@ export default class TicTacWoahAPI {
   }
 
   constructor(token) {
-    this.baseUrl = 'https://api.tic-tac-woah.com/'
+    this.baseUrl = 'http://api.tic-tac-woah.com'
+  }
+
+  setToken = (token) => {
     this.defaultHeaders = {
-        'Authorization': `bearer ${token}`,
+      'Content-Type': 'application/json',
+      'Authorization': `${token}`,
     }
   }
 
-  login = (username, password) => (
-    new Promise((resolve, reject) => {
-        this.sleep(200)
-          .then(() => {
-            resolve({
-              username: "mack",
-              avatar: "😋",
-              token: "8675309",
-              }
-            )
-          })
-    })
-  )
+  login = async (username, password) => {
+      const response = await fetch(`${this.baseUrl}/auth/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: username,
+          password: password,
+        }),
+      })
+
+      if (response.status != 200) {
+        throw response.json()
+      }
+
+      return response.json()
+  }
 
   refreshToken = (token) => (
       new Promise((resolve, reject) => {

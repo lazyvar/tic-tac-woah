@@ -10,6 +10,7 @@ import FormTextField from '../components/FormTextField'
 
 const mapStateToProps = (state) => ({
   token: state.auth.token,
+  errorMessage: state.auth.errorMessage
 })
 
 const mapDispatchToProps = (dispatch) => {
@@ -25,26 +26,65 @@ const mapDispatchToProps = (dispatch) => {
 
 class Login extends Component {
 
+  state = {
+    username: '',
+    password: '',
+  }
+
+  onChangeUsername = (text) => this.setState({...this.state, username: text})
+  onChangePassword = (text) => this.setState({...this.state, password: text})
+
+  tryLogin = () => {
+    const { tryLogin } = this.props
+    const { username, password } = this.state
+
+    tryLogin(username, password)
+  }
+
   render() {
-    const { tryLogin, signUpPressed } = this.props
+    const { tryLogin, signUpPressed, errorMessage } = this.props
+    const { username, password } = this.state
 
     return (
-      <ScrollView>
-        <FormTextField placeholder='Username'/>
-        <FormTextField placeholder='Password'/>
-        <FormButton onPress={tryLogin}>
+      <View style={styles.container}>
+        <Text style={styles.error}> {errorMessage} </Text>
+        <FormTextField 
+          placeholder='Username' 
+          value={username} 
+          onChangeText={this.onChangeUsername}
+        />
+        <FormTextField 
+          placeholder='Password'
+          value={password}
+          onChangeText={this.onChangePassword}
+          secureTextEntry={true}
+          onSubmitEditing={this.tryLogin}
+        />
+        <FormButton onPress={this.tryLogin}>
           Login 
         </FormButton>
         <FormButton backgroundColor='lightgray' onPress={signUpPressed}>
           Sign Up
         </FormButton>
-      </ScrollView>
+      </View>
     )
   }
 }
 
 const styles = StyleSheet.create({
-
+  container: {
+    flex: 1,
+    justifyContent: 'center'
+  },
+  block: {
+    width: 100,
+    height: 100,
+  },
+  error: {
+    color: 'firebrick',
+    padding: 24,
+    textAlign: 'center',
+  }
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login)

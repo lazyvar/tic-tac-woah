@@ -25,7 +25,9 @@ export const actionCreators = {
   			dispatch({type: types.TRY_LOGIN_SUCCESS, payload: response})
         AsyncStorage.setItem(TOKEN_KEY, response.token)
         Actions.replace("home")
-  		})
+  		}).catch((error) => {
+        dispatch({type: types.TRY_LOGIN_FAILURE, payload: error})
+      })
   },
   fetchToken: () => (dispatch) => {
     dispatch({type: types.FETCHING_TOKEN})
@@ -33,7 +35,7 @@ export const actionCreators = {
     AsyncStorage.getItem(TOKEN_KEY)
       .then((token) => {
         if (token == null) {
-            dispatch({type: types.FETCHING_TOKEN_FAILURE})
+          dispatch({type: types.FETCHING_TOKEN_FAILURE})
         } else {
           api.refreshToken(token)
           .then((currentUser) => {
@@ -55,7 +57,8 @@ const initialState = {
   token: null,
   currentUser: null,
   isFetchingToken: true,
-  isLoggingIn: false
+  isLoggingIn: false,
+  errorMessage: null,
 }
 
 export const reducer = (state = initialState, action) => {
@@ -66,6 +69,7 @@ export const reducer = (state = initialState, action) => {
       return {
         ...state,
         isLoggingIn: true,
+        errorMessage: null,
       }
   	}
     case types.TRY_LOGIN_SUCCESS: {
@@ -80,6 +84,7 @@ export const reducer = (state = initialState, action) => {
       return {
         ...state,
         isLoggingIn: false,
+        errorMessage: "Username or password incorrect",
      }
     }
     case types.FETCHING_TOKEN: {
