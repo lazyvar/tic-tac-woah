@@ -10,7 +10,8 @@ import GameLogic from '../game/GameLogic'
 
 const mapStateToProps = (state) => ({
   gameState: state.game.gameState,
-  potentialMove: state.game.potentialMove
+  potentialMove: state.game.potentialMove,
+  currentUser: state.auth.currentUser,
 })
 
 const mapDispatchToProps = (dispatch) => {
@@ -18,8 +19,8 @@ const mapDispatchToProps = (dispatch) => {
     selectSquare: (i, j) => {
       dispatch(gameActionCreators.selectSquare(i, j))
     },
-    confirmSelectedSquare: () => {
-      dispatch(gameActionCreators.confirmSelectedSquare())
+    confirmSelectedSquare: (gameState, i, j) => {
+      dispatch(gameActionCreators.confirmSelectedSquare(gameState, i, j))
     },
     cancelSelectedSquare: () => {
       dispatch(gameActionCreators.cancelSelectedSquare())
@@ -29,16 +30,22 @@ const mapDispatchToProps = (dispatch) => {
 
 class Game extends Component {
 
+  confirmSelectedSquare = () => {
+    const { gameState, potentialMove, confirmSelectedSquare } = this.props
+    
+    confirmSelectedSquare(gameState, potentialMove.i, potentialMove.j)
+  }
+
   render() {
-    const { gameState, potentialMove, selectSquare, confirmSelectedSquare, cancelSelectedSquare} = this.props
+    const { gameState, currentUser, potentialMove, selectSquare, cancelSelectedSquare} = this.props
 
     /* compute things given gameState */
     const gameLogic = new GameLogic(gameState)
     const board = gameLogic.computeBoard()
     const bigBoardSquares = gameLogic.bigBoardSquares(board)
     const playableSmallBoards = gameLogic.playableSmallBoards(bigBoardSquares)
-    const isMyTurn = gameLogic.isMyTurn()
-    const title = gameLogic.gameMessage()
+    const isMyTurn = gameLogic.isMyTurn(currentUser.id)
+    const title = gameLogic.gameMessage(currentUser.id)
     const showButtons = potentialMove !== null
 
     return (
@@ -62,7 +69,10 @@ class Game extends Component {
           </FormButton>
           }
           { showButtons &&
-          <FormButton backgroundColor='green' onPress={confirmSelectedSquare}>
+          <FormButton
+            backgroundColor='green'
+            onPress={this.confirmSelectedSquare}
+            >
             Submit
           </FormButton>
           }

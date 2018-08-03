@@ -10,6 +10,7 @@ import Login from './Login'
 import SignUp from './SignUp'
 import Home from './Home'
 import Game from './Game'
+import SelectAvatar from '../components/SelectAvatar'
 import ProfileSettings from './ProfileSettings'
 
 const mapStateToProps = (state) => ({
@@ -76,6 +77,8 @@ class App extends Component {
             backTitle=' '
             onBack={exitGameScreen}
           /> 
+                  <Modal key="selectAvatar" component={SelectAvatar} />
+
         </Stack>
       </Router>
     )

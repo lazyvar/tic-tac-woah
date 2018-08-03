@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native'
 import { Actions } from 'react-native-router-flux'
 import { connect } from 'react-redux'
+import { List, ListItem } from 'react-native-elements'
 
 import FormButton from '../components/FormButton'
 import FormTextField from '../components/FormTextField'
@@ -22,7 +23,16 @@ class SignUp extends Component {
         <FormTextField placeholder='Username'/>
         <FormTextField placeholder='Password'/>
         <FormTextField placeholder='Confirm Password'/>
-        <FormButton backgroundColor='lightgray' onPress={this.signUpPressed}>
+        <ListItem
+          title={"Avatar"}
+          rightTitle={"😡"}
+          style={styles.row}
+          rightTitleStyle={styles.rightTitleStyle}
+          
+          chevron
+        />
+
+        <FormButton backgroundColor='green' onPress={this.signUpPressed}>
           Sign Up
         </FormButton>
       </ScrollView>
@@ -31,6 +41,15 @@ class SignUp extends Component {
 }
 
 const styles = StyleSheet.create({
+  row: {
+    backgroundColor: 'white',
+    borderBottomColor: 'rgb(232, 232, 232)',
+  },
+  rightTitleStyle: {
+    fontSize: 16,
+    lineHeight: 24,
+    marginBottom: 4,
+  }
 
 })
 
