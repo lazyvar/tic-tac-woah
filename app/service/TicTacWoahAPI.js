@@ -1,7 +1,13 @@
 export default class TicTacWoahAPI {
 
-  sleep = (ms) => {
-    return new Promise(resolve => setTimeout(resolve, ms));
+  static singleton = null
+
+  static shared() {
+    if (TicTacWoahAPI.singleton === null) {
+      TicTacWoahAPI.singleton = new TicTacWoahAPI()
+    }
+
+    return this.singleton
   }
 
   constructor(token) {
@@ -9,6 +15,7 @@ export default class TicTacWoahAPI {
   }
 
   setToken = (token) => {
+    this.token = token
     this.defaultHeaders = {
       'Content-Type': 'application/json',
       'Authorization': `${token}`,
@@ -16,102 +23,130 @@ export default class TicTacWoahAPI {
   }
 
   login = async (username, password) => {
-      const response = await fetch(`${this.baseUrl}/auth/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          username: username,
-          password: password,
-        }),
-      })
+    const response = await fetch(`${this.baseUrl}/auth/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        username: username,
+        password: password,
+      }),
+    })
 
-      if (response.status != 200) {
-        throw response.json()
-      }
+    const json = await response.json()
 
-      return response.json()
+    if (response.status != 200) {
+      throw json
+    }
+
+    return json
   }
 
-  refreshToken = (token) => (
-      new Promise((resolve, reject) => {
-        this.sleep(200)
-          .then(() => {
-            resolve({
-              username: "mack",
-              avatar: "😋",
-              token: "8675309",
-              }
-            )
-          })
+  refreshToken = async () => {
+    const response = await fetch(`${this.baseUrl}/user/self`, {
+      method: 'GET',
+      headers: this.defaultHeaders
     })
-  )
 
-  signUp = (username, password, confirm_password) => (
-    new Promise((resolve, reject) => {
-      resolve({token: "8675309"})
-    })
-  )
+    const json = await response.json()
 
-  getGames = () => (
-    new Promise((resolve, reject) => {
-      this.sleep(600)
-          .then(() => {
-            resolve({
-                games: [
-                  {
-                    moves: [{
-                      moveNumber: 0, 
-                      i: 0, 
-                      j: 0
-                    }, {
-                      moveNumber: 1, 
-                      i: 0, 
-                      j: 2
-                    },{
-                      moveNumber: 2, 
-                      i: 2, 
-                      j: 2
-                    }, {
-                      moveNumber: 3, 
-                      i: 2, 
-                      j: 0
-                    }],
-                    player: {
-                      username: "outsider",
-                      avatar: "😡" 
-                    },
-                    myTurn: true
-                  }
-                ]
-            })
-          })
-    })
-  )
+    if (response.status != 200) {
+      throw json
+    }
 
-  createChallenge = (username) => (
-    new Promise((resolve, reject) => {
-      resolve({})
-    })
-  )
+    return json
+  }
 
-  gameStatus = (id) => (
-    new Promise((resolve, reject) => {
-      resolve({
-        state: [
-          [0, 0, 0, 0, 0, 0, 0, 0, 2],
-          [0, 1, 0, 0, 2, 0, 0, 0, 2],
-          [0, 0, 0, 0, 0, 0, 0, 1, 0],
-          [0, 0, 0, 0, 0, 0, 0, 0, 0],
-          [0, 2, 0, 0, 1, 0, 0, 0, 0],
-          [0, 0, 0, 0, 0, 0, 0, 2, 0],
-          [0, 0, 1, 0, 0, 0, 0, 0, 0],
-          [0, 0, 0, 0, 0, 0, 0, 0, 0],
-          [0, 1, 0, 0, 0, 0, 2, 0, 0]
-        ]
-      })
+  signUp = async (username, password, confirmPassword, avatar) => {
+    const response = await fetch(`${this.baseUrl}/auth/signup`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        username: username,
+        password: password,
+        confirmPassword: confirmPassword,
+        avatar: avatar,
+      }),
     })
-  )
+
+    const json = await response.json()
+
+    if (response.status != 200) {
+      throw json
+    }
+
+    return json
+  }
+
+  getGames = async () => {
+    const response = await fetch(`${this.baseUrl}/game`, {
+      method: 'GET',
+      headers: this.defaultHeaders,
+    })
+
+    const json = await response.json()
+
+    if (response.status != 200) {
+      throw json
+    }
+
+    return json
+  }
+
+  createChallenge = async (username) => {
+    const response = await fetch(`${this.baseUrl}/game/${username}`, {
+      method: 'POST',
+      headers: this.defaultHeaders,
+    })
+
+    const json = await response.json()
+
+    if (response.status != 200) {
+      throw json
+    }
+
+    return json
+  }
+
+  getGame = async (id) => {
+    const response = await fetch(`${this.baseUrl}/game/${id}`, {
+      method: 'GET',
+      headers: this.defaultHeaders,
+    })
+
+    const json = await response.json()
+
+    if (response.status != 200) {
+      throw json
+    }
+
+    return json
+  }
+
+  makeMove = async (gameState, i, j) => {
+    const response = await fetch(`${this.baseUrl}/move`, {
+      method: 'POST',
+      headers: this.defaultHeaders,
+      body: JSON.stringify({
+        gameId: gameState.id,
+        moveNumber: gameState.moves.length,
+        i: i,
+        j: j,
+      }),
+    })
+
+    const json = await response.json()
+
+    console.warn(json)
+
+    if (response.status != 200) {
+      throw json
+    }
+
+    return json
+  }
 
 }
