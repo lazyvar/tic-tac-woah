@@ -65,7 +65,7 @@ class App extends Component {
             onLeft={gotoProfileSettings}
             initial={userIsAuthenticated}
             leftTitle={homeLeftTitle}
-            rightTitle="Create game"
+            rightTitle="New game"
             onRight={createGame}
           />
           <Scene 
@@ -79,7 +79,7 @@ class App extends Component {
             component={Game} 
             backTitle=' '
           />
-          <Scene key="createGame" component={CreateGame} title="Create game"/>
+          <Scene key="createGame" component={CreateGame} title="New game"/>
           <Scene key="selectAvatar" component={SelectAvatar} />
         </Stack>
       </Router>
